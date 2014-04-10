@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "tag.h"
 
 int read_u8(int fd, u8 *val){
@@ -57,6 +58,11 @@ int tag_read_id3_header(int fd, id3v2_header_t *header){
 
 	if (-1 == read(fd,&header->ID3, 3 * sizeof(char))){
 		perror("Cannot read ID3 string in header tag");
+		return -1;
+	}
+
+	if (strcmp(header->ID3,"ID3") != 0){
+		perror("File is not in format IDV2");
 		return -1;
 	}
 
